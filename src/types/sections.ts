@@ -9,7 +9,6 @@ export interface SectionProps {
 }
 
 export interface HomePageProps extends SectionProps {
-  toggleLang: () => void;
   setLang: (lang: Language) => void;
 }
 

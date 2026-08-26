@@ -3,21 +3,17 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Language } from "../translations";
 import { DURATION, EASE_OUT } from "../lib/motion";
-import FlagIcon from "./FlagIcon";
 import LanguageMenu from "./LanguageMenu";
-import { LANG_LABEL } from "../lib/languages";
 import { site } from '../content/site';
 
 interface NavbarProps {
   lang: Language;
-  /** Cycles to the next language — still used by the mobile drawer. */
-  toggleLang: () => void;
   setLang: (lang: Language) => void;
   t: any;
 }
 
 
-const Navbar = ({ lang, toggleLang, setLang, t }: NavbarProps) => {
+const Navbar = ({ lang, setLang, t }: NavbarProps) => {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -310,19 +306,15 @@ const Navbar = ({ lang, toggleLang, setLang, t }: NavbarProps) => {
               </nav>
 
               <div className="mt-auto pt-6 border-t border-[rgba(15,47,92,0.08)] flex flex-col gap-3">
-                <button
-                  onClick={() => {
-                    toggleLang();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex min-h-12 items-center justify-between w-full rounded-2xl bg-[rgba(224,74,77,0.07)] px-4 text-ink"
-                >
-                  <span className="flex items-center gap-2 font-medium">
-                    <FlagIcon lang={lang} />
-                    {t.nav.changeLang}
-                  </span>
-                  <span className="font-semibold uppercase">{LANG_LABEL[lang]}</span>
-                </button>
+                {/* Same switcher as the navbar, in its full-width drawer form:
+                    flags and codes, opening upward over the menu. */}
+                <LanguageMenu
+                  lang={lang}
+                  setLang={setLang}
+                  label={t.nav.changeLang}
+                  variant="drawer"
+                  onSelect={() => setIsMobileMenuOpen(false)}
+                />
                 <a
                   href="#reservation"
                   onClick={() => setIsMobileMenuOpen(false)}

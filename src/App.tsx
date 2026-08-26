@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import HomePage from './components/HomePage';
 import { translations } from './translations';
 import type { Language } from './translations';
-import { LANGUAGES } from './lib/languages';
 import { Toaster } from './components/ui/sonner';
 import { MotionConfig } from 'framer-motion';
 
@@ -18,16 +17,11 @@ export default function App() {
     document.title = t.title;
   }, [lang, t.title]);
 
-  const toggleLang = () => {
-    const currentIndex = LANGUAGES.indexOf(lang);
-    setLang(LANGUAGES[(currentIndex + 1) % LANGUAGES.length]);
-  };
-
   return (
     <ThemeProvider attribute="class" defaultTheme="light">
       {/* Honours the OS "reduce motion" setting for every framer-motion animation */}
       <MotionConfig reducedMotion="user">
-        <HomePage lang={lang} toggleLang={toggleLang} setLang={setLang} t={t} />
+        <HomePage lang={lang} setLang={setLang} t={t} />
         <Toaster />
       </MotionConfig>
     </ThemeProvider>

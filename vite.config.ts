@@ -17,7 +17,7 @@ export default defineConfig({
   //
   
   
-  //base: '/website/',
+ //base: '/website/',
 
   // `host: true` binds the dev and preview servers to every network interface
   // instead of localhost only, so anyone on the same Wi-Fi can open the page at

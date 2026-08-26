@@ -13,7 +13,7 @@ import FaqSection from './sections/FaqSection';
 import FooterSection from './sections/FooterSection';
 import type { HomePageProps } from '../types/sections';
 
-const HomePage = ({ lang, toggleLang, setLang, t }: HomePageProps) => {
+const HomePage = ({ lang, setLang, t }: HomePageProps) => {
   useEffect(() => {
     if (!window.location.hash) return;
     const target = document.querySelector(window.location.hash);
@@ -36,7 +36,7 @@ const HomePage = ({ lang, toggleLang, setLang, t }: HomePageProps) => {
         dir={lang === 'ar' ? 'rtl' : 'ltr'}
         className="min-h-dvh w-full p-2.5 sm:p-3 md:p-4 text-ink"
       >
-        <Navbar lang={lang} toggleLang={toggleLang} setLang={setLang} t={t} />
+        <Navbar lang={lang} setLang={setLang} t={t} />
         <HeroSection {...sectionProps} />
         <AboutSection {...sectionProps} />
         <ServicesSection {...sectionProps} />
