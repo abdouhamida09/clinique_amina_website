@@ -1,0 +1,551 @@
+@import "tailwindcss";
+
+/* Latin + Arabic faces are loaded from Google Fonts in index.html (preconnect +
+   display=swap). `--font-helvetica` keeps its name so existing markup using the
+   `font-helvetica` utility keeps working — it now resolves to Plus Jakarta Sans. */
+@theme {
+  --font-helvetica: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Arabic is driven by html[lang="ar"] below; kept here for explicit use.
+     Two faces, mirroring the Latin pairing: Noto Sans Arabic carries running
+     text, Cairo carries headings — it is tighter and heavier at display sizes,
+     where Noto goes limp. */
+  --font-arabic: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-arabic-display: "Cairo", "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  /* Display serif, used sparingly — the hero pill carries the clinic's name in it.
+     Latin only: `html[lang="ar"]` forces every element back to the Arabic face,
+     which is what we want since Cormorant has no Arabic glyphs. */
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, "Times New Roman", serif;
+
+  --color-brand: #0F2F5C;
+  --color-brand-red: #E04A4D;
+  /* AA-safe variants: -strong carries white text (5.0:1), -ink is for small text on canvas (5.3:1) */
+  --color-brand-red-strong: #C73A3D;
+  --color-brand-red-ink: #B23A3D;
+
+  --color-canvas: #F3F6FA;
+  --color-ink: #0F2F5C;
+  --color-ink-soft: rgba(15, 47, 92, 0.86);
+  --color-ink-muted: rgba(15, 47, 92, 0.68);
+
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: #0F2F5C;
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: #0F2F5C;
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: #0F2F5C;
+
+  --color-primary: #1E4F8C;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: hsl(214 40% 96%);
+  --color-secondary-foreground: #0F2F5C;
+
+  --color-muted: hsl(214 40% 96%);
+  --color-muted-foreground: hsl(215 16% 47%);
+
+  --color-accent: hsl(214 40% 96%);
+  --color-accent-foreground: #0F2F5C;
+
+  --color-destructive: #E04A4D;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: hsl(214 32% 91%);
+  --color-input: hsl(214 32% 91%);
+  --color-ring: #1E4F8C;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Motion tokens — one rhythm for the whole site */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-soft: cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+  --duration-slow: 400ms;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Elevation scale — every surface picks one of these, never a one-off shadow */
+    --elev-1: 0 10px 30px rgba(15, 47, 92, 0.06);
+    --elev-2: 0 22px 70px rgba(15, 47, 92, 0.08);
+    --elev-3: 0 30px 90px rgba(15, 47, 92, 0.14);
+
+    /* Glass recipe */
+    --glass-bg: rgba(255, 255, 255, 0.58);
+    --glass-bg-strong: rgba(255, 255, 255, 0.74);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-blur: 24px;
+
+    --nav-offset: 104px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: clip;
+    font-family: var(--font-helvetica);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    @apply text-foreground;
+    /* Declared last on purpose: `@apply bg-background` resolves to white and would
+       override the canvas. <main> no longer paints a background, so this is the
+       colour behind the aurora — get it wrong and the whole page turns white. */
+    background-color: var(--color-canvas);
+  }
+
+  section,
+  #reservation {
+    scroll-margin-top: var(--nav-offset);
+  }
+
+  /* Every tappable element opts out of the 300ms mobile tap delay */
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  summary {
+    touch-action: manipulation;
+  }
+
+  /* One visible focus treatment for the whole site */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-brand-red-strong);
+    outline-offset: 3px;
+    border-radius: 9999px;
+  }
+
+  ::selection {
+    background: rgba(224, 74, 77, 0.18);
+    color: var(--color-ink);
+  }
+
+  /* ── Arabic typography ──────────────────────────────────────────────────────
+     Arabic is cursive: letter-spacing severs the joins between glyphs, and
+     uppercase/tight tracking are meaningless. Everything below neutralises the
+     Latin-oriented type settings and gives Arabic the leading it needs.        */
+  html[lang="ar"] body,
+  html[dir="rtl"] body {
+    font-family: var(--font-arabic) !important;
+    line-height: 1.75;
+  }
+
+  /* !important is required here: Tailwind's utilities layer outranks base, so a
+     `font-helvetica` class on any wrapper would otherwise win over the script font. */
+  html[lang="ar"] *,
+  html[dir="rtl"] * {
+    letter-spacing: normal !important;
+    font-family: inherit !important;
+  }
+
+  /* Beats the `html[lang="ar"] *` rule above on specificity (0,1,1 over 0,1,0),
+     which is the only way past its `!important`. Word spans inside a heading
+     inherit from it, so a `RevealText` title comes along too. */
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] .display-1,
+  html[lang="ar"] .section-title,
+  html[lang="ar"] .font-display {
+    font-family: var(--font-arabic-display) !important;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3 {
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  html[lang="ar"] p,
+  html[lang="ar"] li {
+    line-height: 1.85;
+  }
+
+  /* Latin digits, phone numbers and counters keep their own direction and face */
+  html[lang="ar"] [dir="ltr"] {
+    font-family: var(--font-helvetica) !important;
+  }
+
+  /* ── Reduced motion ───────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* ── Glass surfaces ───────────────────────────────────────────────────────── */
+  .glass {
+    background-color: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--elev-2);
+  }
+
+  .glass-soft {
+    background-color: rgba(255, 255, 255, 0.45);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--elev-1);
+  }
+
+  .glass-strong {
+    background-color: var(--glass-bg-strong);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--elev-2);
+  }
+
+  /* ── Glass over photography ────────────────────────────────────────────────
+     Labels that sit on top of an image, used by About, Services and the Gallery.
+     They are tinted far darker than `.glass` (the photo, not the canvas, is what
+     shows through) and run a lighter blur because a page can hold a dozen of
+     them at once. Always pair one with a `GlassMedia` scrim so the white text
+     stays readable over a bright photo. */
+  .glass-caption {
+    background-color: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 10px 34px rgba(8, 20, 40, 0.22);
+    color: #ffffff;
+    transition: background-color var(--duration-base) var(--ease-out-soft),
+      border-color var(--duration-base) var(--ease-out-soft),
+      transform var(--duration-base) var(--ease-out-soft);
+  }
+
+  .group:hover .glass-caption {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.42);
+    transform: translateY(-3px);
+  }
+
+  /* Opt out of the panel on small screens: on a 150px-tall gallery tile the
+     frosted box is more chrome than picture, so the label falls back to plain
+     text riding on the scrim. Pair it with responsive padding/radius utilities,
+     which sit in a later layer and keep winning over the rules above. */
+  @media (max-width: 767px) {
+    .glass-caption.bare-sm {
+      background-color: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      border: 0;
+      box-shadow: none;
+      text-shadow: 0 1px 6px rgba(8, 20, 40, 0.55);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .group:hover .glass-caption {
+      transform: none;
+    }
+  }
+
+  /* Interactive lift shared by every card that responds to pointer */
+  .lift {
+    transition: transform var(--duration-base) var(--ease-out-soft),
+      box-shadow var(--duration-base) var(--ease-out-soft),
+      background-color var(--duration-base) var(--ease-out-soft);
+    will-change: transform;
+  }
+
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--elev-3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lift:hover {
+      transform: none;
+    }
+  }
+
+  /* ── Type scale ───────────────────────────────────────────────────────────── */
+  /* Plus Jakarta Sans carries real weights, so display type is set at 700/600 with
+     tight tracking rather than the single-weight look the old face forced. */
+  .display-1 {
+    font-size: clamp(2.6rem, 1.4rem + 4.4vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+  }
+
+  .section-title {
+    font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    font-weight: 600;
+  }
+
+  .section-lead {
+    font-size: clamp(0.975rem, 0.93rem + 0.2vw, 1.125rem);
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+
+  html[lang="ar"] .display-1 {
+    font-size: clamp(2.35rem, 1.3rem + 3.9vw, 4.6rem);
+    line-height: 1.28;
+    font-weight: 700;
+  }
+
+  html[lang="ar"] .section-title {
+    font-size: clamp(2rem, 1.4rem + 2vw, 3.25rem);
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  /* Overline / eyebrow label above every section title */
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--color-brand-red-ink);
+  }
+
+  html[lang="ar"] .eyebrow {
+    text-transform: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* ── Touch target helper: keeps small visuals but a 44px hit area ─────────── */
+  .tap-target {
+    position: relative;
+  }
+
+  .tap-target::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 0 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ── Ambient aurora ───────────────────────────────────────────────────────────
+     Soft colour fields drifting behind the page. Glass surfaces only read as glass
+     when there is something worth blurring behind them; on a flat canvas the
+     backdrop-filter has nothing to work with.
+
+     Built from radial-gradients rather than `filter: blur()` — same softness, but
+     it stays off the compositor's expensive path, which matters on mobile where
+     every glass panel already runs a backdrop-filter. */
+  .aurora {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .aurora span {
+    position: absolute;
+    display: block;
+    border-radius: 9999px;
+    will-change: transform;
+  }
+
+  .aurora .aurora-a {
+    top: -18vh;
+    inset-inline-start: -12vw;
+    width: 62vw;
+    height: 62vw;
+    background: radial-gradient(circle at 50% 50%, rgba(224, 74, 77, 0.14) 0%, rgba(224, 74, 77, 0) 68%);
+    animation: aurora-drift-a 38s ease-in-out infinite;
+  }
+
+  .aurora .aurora-b {
+    top: 28vh;
+    inset-inline-end: -16vw;
+    width: 58vw;
+    height: 58vw;
+    background: radial-gradient(circle at 50% 50%, rgba(30, 79, 140, 0.16) 0%, rgba(30, 79, 140, 0) 68%);
+    animation: aurora-drift-b 46s ease-in-out infinite;
+  }
+
+  .aurora .aurora-c {
+    bottom: -20vh;
+    inset-inline-start: 22vw;
+    width: 54vw;
+    height: 54vw;
+    background: radial-gradient(circle at 50% 50%, rgba(120, 170, 220, 0.16) 0%, rgba(120, 170, 220, 0) 70%);
+    animation: aurora-drift-c 52s ease-in-out infinite;
+  }
+
+  @keyframes aurora-drift-a {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(7vw, 5vh, 0) scale(1.14); }
+  }
+
+  @keyframes aurora-drift-b {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1.06); }
+    50% { transform: translate3d(-6vw, 7vh, 0) scale(1); }
+  }
+
+  @keyframes aurora-drift-c {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(5vw, -6vh, 0) scale(1.12); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora span {
+      animation: none;
+    }
+  }
+
+  /* ── Sheen: a light sweep across primary buttons on hover ──────────────────── */
+  .sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .sheen::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 45%;
+    left: -60%;
+    z-index: -1;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 50%,
+      transparent 100%
+    );
+    transform: skewX(-18deg);
+    transition: left 620ms var(--ease-out-soft);
+  }
+
+  .sheen:hover::after {
+    left: 130%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheen::after {
+      transition: none;
+    }
+    .sheen:hover::after {
+      left: -60%;
+    }
+  }
+
+  /* ── Marquee ───────────────────────────────────────────────────────────────
+     Continuous ribbon of cards (testimonials). The track carries two identical
+     halves and travels exactly -50%, so the seam is never visible. Duration is
+     passed per instance through `--marquee-duration`, which keeps the speed the
+     same whatever the number of cards.
+
+     Driven by CSS keyframes rather than a MotionValue on purpose: the transform
+     stays on the compositor and nothing repaints frame by frame — which is also
+     why the cards inside are flat surfaces and not `.glass`, since a dozen
+     backdrop-filters under a running animation is exactly what melts a phone. */
+  .marquee-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-x var(--marquee-duration, 45s) linear infinite;
+  }
+
+  .marquee-viewport:hover .marquee-track,
+  .marquee-viewport:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-x {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* `animation: none` clears the animation *name*; the global reduce rule only
+       forces duration and iteration-count, so without this the track would snap
+       to its end position instead of stopping. The row turns into a scrollable
+       one so every card stays reachable by hand. */
+    .marquee-track {
+      animation: none;
+    }
+
+    .marquee-viewport {
+      overflow-x: auto;
+    }
+  }
+
+  /* ── Skip link ────────────────────────────────────────────────────────────── */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    inset-inline-start: 0.75rem;
+    z-index: 2000;
+    transform: translateY(-160%);
+    transition: transform var(--duration-base) var(--ease-out-soft);
+    background: #ffffff;
+    color: var(--color-ink);
+    border-radius: 9999px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: var(--elev-2);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+
+  /* ── Utilities ────────────────────────────────────────────────────────────── */
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
