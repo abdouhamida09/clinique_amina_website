@@ -110,6 +110,9 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                 <a href="#services" className={linkClass}>
                   {t.nav.services}
                 </a>
+                <a href="#consultations" className={linkClass}>
+                  {t.nav.consultations}
+                </a>
                 <a href="#galerie" className={linkClass}>
                   {t.nav.gallery}
                 </a>

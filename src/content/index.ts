@@ -14,6 +14,7 @@ import { nav } from './nav';
 import { hero } from './hero';
 import { about } from './about';
 import { services } from './services';
+import { consultations } from './consultations';
 import { gallery } from './gallery';
 import { reservation } from './reservation';
 import { faq } from './faq';
@@ -31,6 +32,7 @@ export const translations = {
     ...hero.fr,
     ...about.fr,
     ...services.fr,
+    ...consultations.fr,
     ...gallery.fr,
     ...reservation.fr,
     ...faq.fr,
@@ -44,6 +46,7 @@ export const translations = {
     ...hero.en,
     ...about.en,
     ...services.en,
+    ...consultations.en,
     ...gallery.en,
     ...reservation.en,
     ...faq.en,
@@ -57,6 +60,7 @@ export const translations = {
     ...hero.ar,
     ...about.ar,
     ...services.ar,
+    ...consultations.ar,
     ...gallery.ar,
     ...reservation.ar,
     ...faq.ar,

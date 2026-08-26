@@ -6,6 +6,7 @@ import AmbientBackground from './AmbientBackground';
 import HeroSection from './sections/HeroSection';
 import AboutSection from './sections/AboutSection';
 import ServicesSection from './sections/ServicesSection';
+import ConsultationsSection from './sections/ConsultationsSection';
 import GallerySection from './sections/GallerySection';
 import ReservationSection from './sections/ReservationSection';
 import TestimonialsSection from './sections/TestimonialsSection';
@@ -40,6 +41,7 @@ const HomePage = ({ lang, setLang, t }: HomePageProps) => {
         <HeroSection {...sectionProps} />
         <AboutSection {...sectionProps} />
         <ServicesSection {...sectionProps} />
+        <ConsultationsSection {...sectionProps} />
         <GallerySection {...sectionProps} />
         <ReservationSection {...sectionProps} />
         <FaqSection {...sectionProps} />

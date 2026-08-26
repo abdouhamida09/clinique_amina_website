@@ -25,6 +25,7 @@ const Navbar = ({ lang, setLang, t }: NavbarProps) => {
     { label: t.nav.home, href: "#accueil", id: "accueil" },
     { label: t.nav.about, href: "#propos", id: "propos" },
     { label: t.nav.services, href: "#services", id: "services" },
+    { label: t.nav.consultations, href: "#consultations", id: "consultations" },
     { label: t.nav.gallery, href: "#galerie", id: "galerie" },
     { label: t.nav.faq, href: "#faq", id: "faq" },
   ];
@@ -184,7 +185,7 @@ const Navbar = ({ lang, setLang, t }: NavbarProps) => {
                   <a
                     href={item.href}
                     aria-current={isActive ? "true" : undefined}
-                    className={`relative flex items-center whitespace-nowrap rounded-full px-3 py-2 transition-colors duration-200 ${
+                    className={`relative flex items-center whitespace-nowrap rounded-full px-2.5 lg:px-3 py-2 transition-colors duration-200 ${
                       isActive
                         ? "text-brand-red-ink font-medium"
                         : "text-ink-soft hover:text-brand-red-ink"

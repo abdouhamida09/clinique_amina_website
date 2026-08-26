@@ -8,6 +8,7 @@
  *   src/content/hero.ts          section d'accueil, chiffres clés, urgences
  *   src/content/about.ts         « À propos »
  *   src/content/services.ts      les sept services et leurs fiches
+ *   src/content/consultations.ts planning des consultations externes
  *   src/content/gallery.ts       galerie photo
  *   src/content/reservation.ts   prise de rendez-vous
  *   src/content/faq.ts           questions fréquentes
