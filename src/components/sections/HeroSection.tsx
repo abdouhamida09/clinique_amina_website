@@ -7,6 +7,7 @@ import { ArrowUpRight, Calendar } from 'lucide-react';
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import type { SectionProps } from '../../types/sections';
 import { DURATION, EASE_OUT, SCROLL_SPRING } from '../../lib/motion';
+import { site } from '../../content/site';
 
 /* Full-bleed height, minus the page gutter. dvh keeps mobile browser chrome from
    cropping the hero when the address bar collapses. */
@@ -40,7 +41,7 @@ const HeroSection = ({ lang, t }: SectionProps) => {
     {/* Oversized and pulled up so the parallax shift never exposes an edge */}
     <motion.img
       style={{ y: imageY }}
-      src="/images/clinique6.jpg"
+      src={site.images.hero}
       alt=""
       aria-hidden="true"
       fetchPriority="high"

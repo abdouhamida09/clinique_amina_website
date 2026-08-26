@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Stethoscope, Users } from "lucide-react";
 import CountUp from "./CountUp";
 import type { SectionProps } from "../types/sections";
+import { site } from '../content/site';
 
 interface StatProps {
   /* Passed already rendered rather than as a component type: the icon differs
@@ -53,13 +54,13 @@ const BottomRightCorner = ({ t }: Pick<SectionProps, "t">) => {
       <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
         <Stat
           icon={<Users className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />}
-          to={6000}
+          to={site.stats.patients}
           label={t.stats.patients}
         />
         <span aria-hidden="true" className="h-8 md:h-11 w-px bg-[rgba(15,47,92,0.1)]" />
         <Stat
           icon={<Stethoscope className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />}
-          to={56}
+          to={site.stats.doctors}
           label={t.stats.doctors}
         />
       </div>

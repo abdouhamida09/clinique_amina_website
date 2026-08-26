@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import RevealText from '../RevealText';
 import type { SectionProps } from '../../types/sections';
 import { DURATION, EASE_OUT, fadeUp, inView } from '../../lib/motion';
+import { site } from '../../content/site';
 
 /** Copies of the list per half of the track — enough to cover a wide screen. */
 const COPIES_PER_HALF = 3;
@@ -89,7 +90,7 @@ const TestimonialsSection = ({ lang, t }: SectionProps) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: DURATION.fast, ease: EASE_OUT }}
-          href={t.testimonials.reviewLink}
+          href={site.reviewLink}
           target="_blank"
           rel="noopener noreferrer"
           className="glass lift inline-flex min-h-13 items-center gap-2 rounded-full px-6 text-ink font-medium hover:bg-white/85"

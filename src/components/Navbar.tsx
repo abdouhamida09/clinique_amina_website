@@ -6,6 +6,7 @@ import { DURATION, EASE_OUT } from "../lib/motion";
 import FlagIcon from "./FlagIcon";
 import LanguageMenu from "./LanguageMenu";
 import { LANG_LABEL } from "../lib/languages";
+import { site } from '../content/site';
 
 interface NavbarProps {
   lang: Language;
@@ -148,7 +149,7 @@ const Navbar = ({ lang, toggleLang, setLang, t }: NavbarProps) => {
               }`}
             >
               <img
-                src="/images/logo.png"
+                src={site.logo}
                 alt=""
                 width="40"
                 height="40"

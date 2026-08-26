@@ -6,17 +6,7 @@ import { LANG_LABEL, LANGUAGES } from '../../lib/languages';
 import WhatsAppIcon from '../WhatsAppIcon';
 import type { FooterProps } from '../../types/sections';
 import { fadeUp, inView } from '../../lib/motion';
-
-/* Numbers live here rather than in the translations: they read the same in every
-   language, and one list means one place to edit. */
-const SWITCHBOARD = ['+213 (0) 28 68 43 63', '+213 (0) 28 68 43 98', '+213 (0) 28 68 44 44'];
-const MOBILE = '+213 (0) 563 02 61 81';
-
-/** Studio credit in the bottom bar. */
-const STUDIO = 'IBS';
-
-/** `+213 (0) 28 68 43 63` → `+21328684363` */
-const toTelHref = (number: string) => `tel:${number.replace(/\(0\)|[^\d+]/g, '')}`;
+import { site, toTelHref } from '../../content/site';
 
 const socialClass =
   'h-11 w-11 rounded-full bg-[rgba(224,74,77,0.1)] border border-[rgba(224,74,77,0.14)] flex items-center justify-center text-brand-red-ink hover:bg-[rgba(224,74,77,0.18)] transition-colors duration-200';
@@ -42,7 +32,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
           >
             <span className="h-10 w-10 overflow-hidden rounded-full flex items-center justify-center bg-[rgba(224,74,77,0.08)]">
               <img
-                src="/images/logo.png"
+                src={site.logo}
                 alt=""
                 width="40"
                 height="40"
@@ -66,7 +56,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
                     {t.footer.switchboard}
                   </span>
-                  {SWITCHBOARD.map((number) => (
+                  {site.phones.switchboard.map((number) => (
                     <a key={number} href={toTelHref(number)} className={linkClass}>
                       <span dir="ltr" className="tabular">
                         {number}
@@ -82,19 +72,19 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
                     {t.footer.mobile}
                   </span>
-                  <a href={toTelHref(MOBILE)} className={linkClass}>
+                  <a href={toTelHref(site.phones.mobile)} className={linkClass}>
                     <span dir="ltr" className="tabular">
-                      {MOBILE}
+                      {site.phones.mobile}
                     </span>
                   </a>
                 </div>
               </div>
-              <a href="mailto:contact@cliniqueamina.com" className={linkClass}>
+              <a href={`mailto:${site.email}`} className={linkClass}>
                 <Mail className="h-4 w-4 shrink-0 text-brand-red-ink" aria-hidden="true" />
-                contact@cliniqueamina.com
+                {site.email}
               </a>
               <a
-                href="https://maps.app.goo.gl/gCqrqou6dtNnxmEEA"
+                href={site.maps.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${linkClass} items-start !py-1.5`}
@@ -130,7 +120,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                   {t.nav.rdv}
                 </a>
                 <a
-                  href="https://maps.app.goo.gl/gCqrqou6dtNnxmEEA"
+                  href={site.maps.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={linkClass}
@@ -144,7 +134,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
               <h3 className="eyebrow !tracking-[0.22em]">{t.footer.socialsTitle}</h3>
               <div className="mt-3 flex flex-nowrap items-center gap-2">
                 <a
-                  href="https://www.instagram.com/clinique__amina/"
+                  href={site.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -153,7 +143,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                   <Instagram className="h-5 w-5" aria-hidden="true" />
                 </a>
                 <a
-                  href="https://www.facebook.com/cliniqueaminaofficielle/"
+                  href={site.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
@@ -162,7 +152,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
                   <Facebook className="h-5 w-5" aria-hidden="true" />
                 </a>
                 <a
-                  href="https://wa.me/213563026181"
+                  href={site.social.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
@@ -235,7 +225,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
 
           <div className="relative flex-1 min-h-[140px] md:min-h-[170px] rounded-[1.5rem] overflow-hidden border border-[rgba(224,74,77,0.14)] bg-[rgba(224,74,77,0.04)] shadow-inner">
             <MapEmbed
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3208.8666001854263!2d2.7443334999999998!3d36.46078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128f730032d33243%3A0x41270bd15b630733!2sClinique%20Amina!5e0!3m2!1sfr!2sdz!4v1787232567715!5m2!1sfr!2sdz"
+              src={site.maps.embed}
               title={t.footer.doctorName}
               loadingLabel={t.footer.mapLoading}
             />
@@ -251,7 +241,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
         {/* Studio name kept out of the translations — it is a proper noun, and
             holding it in one place means one edit if it ever becomes a link. */}
         <p>
-          {t.footer.madeBy} <span className="font-semibold text-ink-soft">{STUDIO}</span>
+          {t.footer.madeBy} <span className="font-semibold text-ink-soft">{site.studio}</span>
         </p>
       </div>
     </motion.div>

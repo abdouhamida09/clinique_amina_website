@@ -3,6 +3,7 @@ import GlassMedia from '../GlassMedia';
 import RevealText from '../RevealText';
 import type { SectionProps } from '../../types/sections';
 import { inView, slideIn, staggerChild, staggerParent } from '../../lib/motion';
+import { site } from '../../content/site';
 
 const AboutSection = ({ lang, t }: SectionProps) => {
   const isRtl = lang === 'ar';
@@ -18,7 +19,7 @@ const AboutSection = ({ lang, t }: SectionProps) => {
           className="group"
         >
           <GlassMedia
-            src="/images/clinique5.jpg"
+            src={site.images.about}
             alt={t.about.title}
             parallax={26}
             scrim="soft"

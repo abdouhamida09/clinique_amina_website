@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Phone } from "lucide-react";
 import { DURATION, EASE_OUT } from "../lib/motion";
 import type { SectionProps } from "../types/sections";
+import { site, toTelHref } from "../content/site";
 
 const BottomLeftCard = ({ t }: Pick<SectionProps, "t">) => {
   return (
@@ -23,7 +24,7 @@ const BottomLeftCard = ({ t }: Pick<SectionProps, "t">) => {
           className="tabular text-xl md:text-2xl lg:text-3xl font-medium text-ink tracking-tight leading-tight"
           dir="ltr"
         >
-          +213 (0) 563 02 61 81
+          {site.phones.mobile}
         </span>
         <span className="mt-1 text-[10px] md:text-[12px] font-bold text-brand-red-ink uppercase tracking-[0.12em]">
           {t.urgency.title}
@@ -31,7 +32,7 @@ const BottomLeftCard = ({ t }: Pick<SectionProps, "t">) => {
       </div>
 
       <motion.a
-        href="tel:+213563026181"
+        href={toTelHref(site.phones.mobile)}
         whileHover="hover"
         whileTap={{ scale: 0.97 }}
         transition={{ duration: DURATION.fast, ease: EASE_OUT }}
