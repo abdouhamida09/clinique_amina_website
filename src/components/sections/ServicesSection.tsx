@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Ambulance,
@@ -19,6 +19,7 @@ import GlassMedia from '../GlassMedia';
 import RevealText from '../RevealText';
 import type { SectionProps } from '../../types/sections';
 import { DURATION, EASE_OUT, fadeUp, inView } from '../../lib/motion';
+import { useDraggableMarquee } from '../../lib/useDraggableMarquee';
 
 type ServiceItem = SectionProps['t']['services']['items'][number];
 
@@ -298,15 +299,16 @@ interface ServicesMarqueeProps extends SectionProps {
   onOpen: (index: number) => void;
 }
 
-/* Desktop only — the phone layout keeps its pinned stack. Same ribbon as the
-   testimonials: two identical halves travelling -50%, so the loop has no seam,
-   and a CSS animation rather than a MotionValue so the transform stays on the
-   compositor. It pauses on hover and on focus, which is what makes the cards
-   clickable: the reader reaches for one, the ribbon stops under the pointer. */
+/* Desktop only — the phone layout keeps its pinned stack. The ribbon shares its
+   whole behaviour with the testimonials one: see `useDraggableMarquee`. */
 const ServicesMarquee = ({ lang, t, onOpen }: ServicesMarqueeProps) => {
   const items = t.services.items;
   const half = Array.from({ length: COPIES_PER_HALF }, () => items).flat();
   const cards = [...half, ...half];
+
+  const { viewportProps, trackProps } = useDraggableMarquee({
+    loopSeconds: half.length * SECONDS_PER_CARD,
+  });
 
   return (
     <motion.div
@@ -319,10 +321,13 @@ const ServicesMarquee = ({ lang, t, onOpen }: ServicesMarqueeProps) => {
       dir="ltr"
       role="region"
       aria-label={t.services.title}
-      style={{ '--marquee-duration': `${half.length * SECONDS_PER_CARD}s` } as CSSProperties}
       className="marquee-viewport hidden md:block -mx-4 sm:-mx-6 py-3"
+      {...viewportProps}
     >
-      <ul className="marquee-track gap-4 px-2">
+      <motion.ul
+        {...trackProps}
+        className="marquee-draggable gap-4 px-2"
+      >
         {cards.map((service, index) => {
           const position = index % items.length;
           // Repeats past the first pass are decoration: the reader hears the list
@@ -352,7 +357,7 @@ const ServicesMarquee = ({ lang, t, onOpen }: ServicesMarqueeProps) => {
             </li>
           );
         })}
-      </ul>
+      </motion.ul>
     </motion.div>
   );
 };

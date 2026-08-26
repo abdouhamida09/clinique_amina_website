@@ -100,7 +100,7 @@ const FooterSection = ({ lang, t, setLang }: FooterProps) => (
           <div className="grid gap-6 md:gap-0">
             <div>
               <h3 className="eyebrow !tracking-[0.22em]">{t.footer.linksTitle}</h3>
-              <nav className="mt-2 flex flex-col text-sm">
+              <nav className="mt-2 grid grid-cols-2 gap-x-4 md:grid-cols-1 md:flex md:flex-col text-sm">
                 <a href="#accueil" className={linkClass}>
                   {t.nav.home}
                 </a>

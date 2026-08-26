@@ -1,9 +1,9 @@
-import type { CSSProperties } from 'react';
 import { MessageCircle, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import RevealText from '../RevealText';
 import type { SectionProps } from '../../types/sections';
 import { DURATION, EASE_OUT, fadeUp, inView } from '../../lib/motion';
+import { useDraggableMarquee } from '../../lib/useDraggableMarquee';
 import { site } from '../../content/site';
 
 /** Copies of the list per half of the track — enough to cover a wide screen. */
@@ -15,12 +15,18 @@ const TestimonialsSection = ({ lang, t }: SectionProps) => {
   const items = t.testimonials.items;
   const isRtl = lang === 'ar';
 
-  /* Two identical halves: the CSS travels -50%, so the track lands back on a
-     copy of its own start and the loop never shows a seam. Each half repeats
-     the list until it is wider than the viewport, otherwise the ribbon would
-     run out of cards mid-screen. */
+  /* Two identical halves: the track travels -50%, so it lands back on a copy of
+     its own start and the loop never shows a seam. Each half repeats the list
+     until it is wider than the viewport, otherwise the ribbon would run out of
+     cards mid-screen. */
   const half = Array.from({ length: COPIES_PER_HALF }, () => items).flat();
   const cards = [...half, ...half];
+
+  /* Draggable on every screen, unlike the services ribbon: this one is the
+     mobile layout too, and a thumb is the natural way through it. */
+  const { viewportProps, trackProps } = useDraggableMarquee({
+    loopSeconds: half.length * SECONDS_PER_CARD,
+  });
 
   return (
     <section id="avis" className="relative px-4 sm:px-6 md:px-6 pb-20 md:pb-32 overflow-hidden">
@@ -49,10 +55,10 @@ const TestimonialsSection = ({ lang, t }: SectionProps) => {
         dir="ltr"
         role="region"
         aria-label={t.testimonials.title}
-        style={{ '--marquee-duration': `${half.length * SECONDS_PER_CARD}s` } as CSSProperties}
         className="marquee-viewport -mx-4 sm:-mx-6 mt-10 md:mt-14 py-2"
+        {...viewportProps}
       >
-        <ul className="marquee-track gap-3 md:gap-4 px-2">
+        <motion.ul {...trackProps} className="marquee-draggable gap-3 md:gap-4 px-2">
           {cards.map((item, index) => (
             <li
               // Repeats past the first pass are decoration: the reader hears the
@@ -82,7 +88,7 @@ const TestimonialsSection = ({ lang, t }: SectionProps) => {
               </div>
             </li>
           ))}
-        </ul>
+        </motion.ul>
       </motion.div>
 
       <div className="mt-10 flex justify-center">

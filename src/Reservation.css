@@ -626,6 +626,11 @@
     margin-bottom: 2rem;
   }
 
+  /* Masque le lieu (Chiffa, Blida) sur mobile */
+  .res-contact-pill--map {
+    display: none;
+  }
+
   .res-contact-pill {
     padding: 0.5rem 0.75rem;
     font-size: 0.75rem;

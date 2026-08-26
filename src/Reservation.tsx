@@ -180,7 +180,7 @@ export default function Reservation({ lang }: { lang: Language }) {
               <Phone size={16} />
               <span dir="ltr">+213 (0) 563 02 61 81</span>
             </a>
-            <a href="https://maps.app.goo.gl/gCqrqou6dtNnxmEEA" target="_blank" rel="noopener noreferrer" className="res-contact-pill">
+            <a href="https://maps.app.goo.gl/gCqrqou6dtNnxmEEA" target="_blank" rel="noopener noreferrer" className="res-contact-pill res-contact-pill--map">
               <MapPin size={16} />
               <span>{t.shortAddress}</span>
             </a>

@@ -465,52 +465,60 @@
   }
 
   /* ── Marquee ───────────────────────────────────────────────────────────────
-     Continuous ribbon of cards (testimonials). The track carries two identical
-     halves and travels exactly -50%, so the seam is never visible. Duration is
-     passed per instance through `--marquee-duration`, which keeps the speed the
-     same whatever the number of cards.
+     Continuous ribbon of cards, used by the services and the testimonials. The
+     track carries two identical halves and travels exactly -50%, so the seam is
+     never visible.
 
-     Driven by CSS keyframes rather than a MotionValue on purpose: the transform
-     stays on the compositor and nothing repaints frame by frame — which is also
-     why the cards inside are flat surfaces and not `.glass`, since a dozen
-     backdrop-filters under a running animation is exactly what melts a phone. */
+     That travel used to be CSS keyframes. It is now a MotionValue driven by
+     `useDraggableMarquee`, because the reader can grab the ribbon and JS has to
+     own the position. The cost is the same — one transform on one element per
+     frame, no layout and no repaint — which is also why the cards inside are
+     flat surfaces and not `.glass`, since a dozen backdrop-filters under a
+     running animation is exactly what melts a phone.
+
+     `touch-action: pan-y` is what keeps the page scrollable on a touchscreen:
+     the ribbon claims the horizontal axis and leaves the vertical one to the
+     document. */
   .marquee-viewport {
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
   }
 
-  .marquee-track {
+  .marquee-draggable {
     display: flex;
     width: max-content;
-    animation: marquee-x var(--marquee-duration, 45s) linear infinite;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
-  .marquee-viewport:hover .marquee-track,
-  .marquee-viewport:focus-within .marquee-track {
-    animation-play-state: paused;
+  .marquee-draggable:active {
+    cursor: grabbing;
   }
 
-  @keyframes marquee-x {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
+  /* The photos are the widest grab target on the card, and a native image drag
+     halfway through a pan would hand the pointer to the browser. */
+  .marquee-draggable img {
+    -webkit-user-drag: none;
+    user-select: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    /* `animation: none` clears the animation *name*; the global reduce rule only
-       forces duration and iteration-count, so without this the track would snap
-       to its end position instead of stopping. The row turns into a scrollable
-       one so every card stays reachable by hand. */
-    .marquee-track {
-      animation: none;
-    }
-
+    /* The ribbons drop their transform and their pan handlers here, so the row
+       turns into a natively scrollable one and every card stays reachable — by
+       the wheel, the trackpad, the scrollbar or the keyboard. The grab
+       affordance would be a lie in that state: the row is scrolled, not
+       dragged. */
     .marquee-viewport {
       overflow-x: auto;
+    }
+
+    .marquee-draggable {
+      cursor: auto;
+      user-select: auto;
+      -webkit-user-select: auto;
     }
   }
 
