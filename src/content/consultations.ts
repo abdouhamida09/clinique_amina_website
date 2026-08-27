@@ -189,9 +189,9 @@ const labels = {
   fr: {
     ui: {
       overline: "CONSULTATIONS",
-      title: "Agenda des consultations",
+      title: "Horaires des consultations",
       description:
-        "L'agenda de la semaine, jour par jour. Choisissez une spécialité pour afficher son agenda.",
+        "Les horaires de la semaine, jour par jour. Choisissez une spécialité pour afficher ses horaires.",
       filterLabel: "Spécialité",
       doctorPrefix: "Dr",
       today: "Aujourd'hui",
@@ -254,9 +254,9 @@ const labels = {
   en: {
     ui: {
       overline: "CONSULTATIONS",
-      title: "Consultation agenda",
+      title: "Consultation hours",
       description:
-        "The week's agenda, day by day. Pick a specialty to see its own agenda.",
+        "The week's hours, day by day. Pick a specialty to see its own hours.",
       filterLabel: "Specialty",
       doctorPrefix: "Dr",
       today: "Today",
@@ -319,9 +319,9 @@ const labels = {
   ar: {
     ui: {
       overline: "العيادات الخارجية",
-      title: "أجندة الاستشارات",
+      title: "مواعيد الاستشارات",
       description:
-        "أجندة الأسبوع، يوماً بيوم. اختر تخصصاً لعرض أجندته.",
+        "مواعيد الأسبوع، يوماً بيوم. اختر تخصصاً لعرض مواعيده.",
       filterLabel: "التخصص",
       doctorPrefix: "د.",
       today: "اليوم",
